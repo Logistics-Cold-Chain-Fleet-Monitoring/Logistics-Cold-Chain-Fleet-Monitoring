@@ -1,0 +1,21 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local runtime state
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# IDE and OS metadata
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Temporary report conversion files
+~$*

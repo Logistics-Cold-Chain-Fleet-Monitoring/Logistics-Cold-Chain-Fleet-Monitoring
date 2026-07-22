@@ -1,0 +1,26 @@
+# Demo Video Link
+
+<!-- Replace the URL below with your actual demo video link -->
+<!-- The video should be 15-20 minutes, uploaded as MP4 or YouTube/Google Drive -->
+<!-- Set to 'anyone with the link' and test from incognito before submitting -->
+
+Video URL: NOT AVAILABLE — RECORDING AND PUBLIC LINK REQUIRED BEFORE SUBMISSION
+
+## Demo Video Checklist (15-20 minutes)
+
+The demo video must show:
+
+1. **Sensor simulator running** with all anomaly modes
+2. **Preprocessing pipeline** extracting 6-feature vectors from MQTT streams
+3. **Model training** showing accuracy exceeds 88%
+4. **TFLite conversion** producing M1, M2, M3 variants
+5. **Docker OTA demo**: rebuild with only model change, show only model layer rebuilds
+   - Calculate bandwidth saving: only ~280 KB model layer vs full image (~150 MB)
+   - For 85 trucks: 85 × 0.28 MB = 23.8 MB vs 85 × 150 MB = 12,750 MB
+   - Bandwidth saving: 99.8%
+6. **PSI drift monitoring**:
+   - Phase 1 (Clean): PSI below 0.25
+   - Phase 2 (Drift injection): PSI crosses 0.25, alert triggered
+   - Phase 3 (Recovery): PSI returns below 0.10
+7. **Ansible deployment**: Run playbook TWICE, show second run has changed=0
+8. **Benchmark results**: 5-metric table and Pareto chart

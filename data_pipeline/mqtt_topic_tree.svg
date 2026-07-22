@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+  <rect width="1400" height="760" fill="#f8fafc"/>
+  <style>
+    .title { font: 700 34px 'Segoe UI', sans-serif; fill: #0f172a; }
+    .node { font: 600 22px 'Consolas', monospace; fill: #0f172a; }
+    .leaf { font: 20px 'Consolas', monospace; fill: #334155; }
+    .qos { font: italic 18px 'Segoe UI', sans-serif; fill: #0369a1; }
+    .line { stroke: #94a3b8; stroke-width: 3; fill: none; }
+    .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 12; }
+  </style>
+  <text x="700" y="55" text-anchor="middle" class="title">LogiEdge MQTT Topic Tree</text>
+  <rect x="45" y="85" width="1310" height="630" class="box"/>
+  <path class="line" d="M120 145 V665 M120 180 H210 M120 610 H210 M250 205 V550 M250 240 H360 M250 520 H360 M410 260 V475 M410 285 H525 M410 340 H525 M410 395 H525 M410 450 H525"/>
+  <text x="75" y="145" class="node">logibridge/</text>
+  <text x="215" y="185" class="node">trucks/{truck_id}/</text>
+  <text x="365" y="245" class="node">sensors/</text>
+  <text x="530" y="290" class="leaf">temperature</text><text x="855" y="290" class="qos">QoS 0 · 1 Hz</text>
+  <text x="530" y="345" class="leaf">vibration</text><text x="855" y="345" class="qos">QoS 0 · 0.5 Hz RMS</text>
+  <text x="530" y="400" class="leaf">door</text><text x="855" y="400" class="qos">QoS 1 · discrete event</text>
+  <text x="365" y="455" class="leaf">features/window</text><text x="855" y="455" class="qos">QoS 0 · six-value vector</text>
+  <text x="365" y="510" class="leaf">inference</text><text x="855" y="510" class="qos">QoS 1 · class + confidence</text>
+  <text x="365" y="565" class="leaf">alerts/{anomaly|drift}</text><text x="855" y="565" class="qos">QoS 2 / QoS 1</text>
+  <text x="365" y="620" class="leaf">status/{heartbeat|sync}</text><text x="855" y="620" class="qos">QoS 0 / QoS 1</text>
+  <text x="215" y="670" class="node">fleet/ops_centre/{dashboard|commands}</text><text x="855" y="670" class="qos">QoS 0 / QoS 1</text>
+</svg>

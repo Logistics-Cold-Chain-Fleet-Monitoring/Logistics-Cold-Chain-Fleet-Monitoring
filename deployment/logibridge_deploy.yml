@@ -1,0 +1,94 @@
+---
+# LogiEdge Ansible Deployment Playbook (Task E2)
+# File: logibridge_deploy.yml
+# Exactly 7 tasks as specified in the assignment.
+# Must be idempotent — second run should report changed=0.
+#
+# Usage:
+#   ansible-playbook logibridge_deploy.yml -i inventory.yml
+#   # Run twice — second run must show changed=0
+
+- name: Deploy LogiEdge inference service to edge node
+  hosts: edge_nodes
+  become: yes
+  vars:
+    logibridge_dir: /opt/logibridge
+    model_file: model.tflite
+    reference_dist_file: reference_dist.json
+    container_name: logibridge-inference
+    container_image: localhost:5000/logibridge-inference:latest
+    truck_id: "{{ inventory_hostname }}"
+    mqtt_broker: localhost
+    mqtt_port: 1883
+    ops_mqtt_broker: ""
+    ops_mqtt_port: 1883
+    model_path: /opt/logibridge/model.tflite
+
+  tasks:
+    # Task 1: Create /opt/logibridge directory if not present
+    - name: Create /opt/logibridge directory if not present
+      ansible.builtin.file:
+        path: "{{ logibridge_dir }}"
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+
+    # Task 2: Copy new model file to /opt/logibridge/model.tflite
+    - name: Copy new model file to /opt/logibridge/model.tflite
+      ansible.builtin.copy:
+        src: "../inference/{{ model_file }}"
+        dest: "{{ logibridge_dir }}/{{ model_file }}"
+        mode: '0644'
+      register: model_copy
+
+    # Task 3: Copy updated reference_dist.json
+    - name: Copy updated reference_dist.json
+      ansible.builtin.copy:
+        src: "../monitoring/{{ reference_dist_file }}"
+        dest: "{{ logibridge_dir }}/{{ reference_dist_file }}"
+        mode: '0644'
+      register: reference_copy
+
+    # Task 4: Stop the running inference container if running
+    - name: Stop the running inference container if running
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        state: stopped
+      ignore_errors: yes
+      when: model_copy.changed or reference_copy.changed
+
+    # Task 5: Pull updated container image from local Docker registry
+    - name: Pull updated container image from local Docker registry
+      community.docker.docker_image:
+        name: "{{ container_image }}"
+        source: pull
+
+    # Task 6: Start inference container with environment variables
+    - name: Start inference container with environment variables
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ container_image }}"
+        state: started
+        restart_policy: unless-stopped
+        env:
+          MODEL_PATH: "{{ model_path }}"
+          TRUCK_ID: "{{ truck_id }}"
+          MQTT_BROKER: "{{ mqtt_broker }}"
+          MQTT_PORT: "{{ mqtt_port | string }}"
+          OPS_MQTT_BROKER: "{{ ops_mqtt_broker }}"
+          OPS_MQTT_PORT: "{{ ops_mqtt_port | string }}"
+          ALERT_DB_PATH: "{{ logibridge_dir }}/alerts.db"
+        volumes:
+          - "{{ logibridge_dir }}:/opt/logibridge"
+        network_mode: host
+
+    # Task 7: Wait 15 seconds and verify container is running
+    - name: Wait 15 seconds and verify container is running
+      ansible.builtin.shell: |
+        sleep 15
+        docker inspect --format='{{ '{{' }}.State.Running{{ '}}' }}' {{ container_name }}
+      register: container_status
+      changed_when: false
+      failed_when: "'true' not in container_status.stdout"
+

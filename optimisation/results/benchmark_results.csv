@@ -1,0 +1,4 @@
+Variant,Mean Latency (ms),p95 Latency (ms),File Size (KB),Accuracy (%),Energy (mJ),Class 2 Recall (%)
+M1 — FP32 Baseline,0.002,0.0026,5.2,100.0,0.0015,100.0
+M2 — PTQ INT8,0.0041,0.0048,4.46,93.22,0.003,100.0
+M3 — Pruned + INT8,0.004,0.0049,4.42,98.31,0.003,100.0

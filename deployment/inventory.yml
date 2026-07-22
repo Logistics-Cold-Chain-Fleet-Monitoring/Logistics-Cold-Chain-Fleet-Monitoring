@@ -1,0 +1,6 @@
+all:
+  children:
+    edge_nodes:
+      hosts:
+        localhost:
+          ansible_connection: local
